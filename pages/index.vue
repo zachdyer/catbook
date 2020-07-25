@@ -2,7 +2,7 @@
   <div class="container">
     <div>
       <Logo />
-      <Cat :cat="cat" />
+      <Cat :cat="cat" @update="updateCat" />
       <h1 class="title">
         Catbook
       </h1>
@@ -16,7 +16,21 @@ export default {
   async asyncData ({ params }) {
     const { data } = await axios.get(`https://api.thecatapi.com/v1/images/search`)
     console.log(data[0])
-     return { cat: data[0] }
+    return { cat: data[0] }
+  },
+  head: {
+    title: 'Catbook Webapp'
+  },
+  methods: {
+    updateCat(){
+      console.log('parent function')
+      axios
+      .get(`https://api.thecatapi.com/v1/images/search`)
+      .then((response) => {
+        console.log(response)
+        this.cat = response.data[0]
+      })
+    }
   }
 }
 </script>

@@ -1,20 +1,8 @@
 <template>
 <div class="links">
-  <nuxt-link
-    to="/"
-    class="button--green"
-  >
-    Home
-  </nuxt-link>
-  <nuxt-link
-    to="/another-one"
-    class="button--grey"
-  >
-    Another One
-  </nuxt-link>
+  <button @click="$parent.updateCat()" class="button--green">Another One</button>
 </div>
 </template>
-
 <style>
 
 </style>
