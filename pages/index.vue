@@ -2,34 +2,60 @@
   <div class="container">
     <div>
       <Logo />
-      <Cat :cat="cat" @update="updateCat" />
-      <h1 class="title">
-        Catbook
-      </h1>
-      <Nav />
+      <Cat :cat="cat" />
+      <Nav v-on:anotherone="updateCat" />
+      <Footer />
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import _     from 'lodash'
 export default {
-  async asyncData ({ params }) {
-    const { data } = await axios.get(`https://api.thecatapi.com/v1/images/search`)
-    console.log(data[0])
-    return { cat: data[0] }
+  async asyncData ({ $axios, params }) {
+    const cat = (await $axios.$get(`https://api.thecatapi.com/v1/images/search?limit=2`))
+    const catpics = (await $axios.$get(`/api/catpics`))
+    cat[0].name =  "Random Cat 1"
+    cat[1].name =  "Random Cat 2"
+    return {
+      cat: cat[0],
+      deck: cat[1],
+      catpics: catpics
+    }
   },
   head: {
     title: 'Catbook Webapp'
   },
+  data(){
+    return {
+      deck: null
+    }
+  },
+  mounted(){
+    console.log(this.$route)
+  },
   methods: {
     updateCat(){
-      console.log('parent function')
-      axios
-      .get(`https://api.thecatapi.com/v1/images/search`)
-      .then((response) => {
-        console.log(response)
-        this.cat = response.data[0]
-      })
+      if(this.deck) this.cat = this.deck
+      if(Math.random() < 0.5) {
+        this.cat = {
+          name: 'Katy Purry',
+          url: `/img/cats/${_.sample(this.catpics)}`
+        }
+        this.$store.commit('add', this.cat)
+      } else {
+        axios
+        .get(`https://api.thecatapi.com/v1/images/search`)
+        .then((response) => {
+          let preload = new Image()
+          preload.src = response.data[0].url
+          console.log(preload)
+          preload.addEventListener('load',function(){console.log('image preloaded')})
+          response.data[0].name = 'Random Cat'
+          this.deck = response.data[0]
+          this.$store.commit('add', response.data[0])
+        })
+      }
     }
   }
 }
@@ -43,7 +69,6 @@ export default {
   align-items: center;
   text-align: center;
 }
-
 .title {
   font-family:
     'Quicksand',

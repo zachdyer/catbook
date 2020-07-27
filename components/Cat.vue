@@ -1,29 +1,16 @@
 <template>
   <div>
-    <!--<h2>{{ test }}</h2>-->
-    <img v-if="cat" :src="cat.url" class="img-thumbnail mt-4" style="width: 300px"/>
+    <div class="card mx-auto mt-4" style="width: 300px" v-if="cat">
+      <img class="card-img-top" :src="cat.url" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{ cat.name }}</h5>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
     props: ['cat'],
-    data() {
-     return {
-      // cat: null
-     }
-    },
-     
-   mounted(){
-    // axios
-    //   .get(`https://api.thecatapi.com/v1/images/search`)
-    //   .then(function(response){
-    //     console.log(response)
-    //     this.cat = response[0]
-    //   })
-   },
-   methods:{
-   }
 }
 </script>
 <style>

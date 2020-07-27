@@ -1,17 +1,12 @@
 <template>
-  <div>
+  <div class="my-5">
     <Nuxt />
+    <div class="text-center d-none">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
   </div>
 </template>
 <script>
-// import axios from 'axios'
-// export default {
-//   async asyncData ({ params }) {
-//     const { data } = await axios.get(`https://api.thecatapi.com/v1/images/search`)
-//     console.log(data)
-//     // return { title: data.title }
-//   }
-// }
 </script>
 <style>
 html {

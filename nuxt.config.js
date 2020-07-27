@@ -5,6 +5,17 @@ export default {
     port: process.env.NUXT_ENV_PORT || 3000, // default: 3000
     host: process.env.NUXT_ENV_HOST || '0.0.0.0' // default: localhost
   },
+  serverMiddleware: [
+    // Will register redirect-ssl npm package
+    //'redirect-ssl',
+
+    // Will register file from project api directory to handle /api/* requires
+    { path: '/api', handler: '~/api/images-api.js' },
+    //{ path: '/api/image-order2', handler: '~/api/index.js' },
+
+    // We can create custom instances too
+    //{ path: '/static2', handler: serveStatic(__dirname + '/static2') }
+  ],
   /*
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
@@ -67,7 +78,10 @@ export default {
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
-  axios: {},
+  axios: {
+    proxyHeaders: true,
+    baseURL: 'https://zach.dev.megabuilds.com/'
+  },
   /*
   ** Content module configuration
   ** See https://content.nuxtjs.org/configuration
