@@ -15,8 +15,8 @@ export default {
   async asyncData ({ $axios, params }) {
     const cat = (await $axios.$get(`https://api.thecatapi.com/v1/images/search?limit=2`))
     const catpics = (await $axios.$get(`/api/catpics`))
-    cat[0].name =  "Random Cat 1"
-    cat[1].name =  "Random Cat 2"
+    cat[0].name =  `Random Cat ${cat[0].id}`
+    cat[1].name =  `Random Cat ${cat[0].id}`
     return {
       cat: cat[0],
       deck: cat[1],
@@ -38,20 +38,28 @@ export default {
     updateCat(){
       if(this.deck) this.cat = this.deck
       if(Math.random() < 0.5) {
-        this.cat = {
-          name: 'Katy Purry',
-          url: `/img/cats/${_.sample(this.catpics)}`
-        }
-        this.$store.commit('add', this.cat)
+        axios.get(`/api/catpics`).then((response)=>{
+          let cat = _.sample(response.data)
+      
+          this.deck = {
+            name: cat.name,
+            url: `/img/cats/${cat.url}`
+          }
+          let preload = new Image()
+          preload.src = cat.url
+          preload.addEventListener('load',function(){console.log('image preloaded')})
+          this.$store.commit('add', this.deck)
+          console.log(cat)
+        })
+        
       } else {
         axios
         .get(`https://api.thecatapi.com/v1/images/search`)
         .then((response) => {
           let preload = new Image()
           preload.src = response.data[0].url
-          console.log(preload)
           preload.addEventListener('load',function(){console.log('image preloaded')})
-          response.data[0].name = 'Random Cat'
+          response.data[0].name = `Random Cat ${response.data[0].id}`
           this.deck = response.data[0]
           this.$store.commit('add', response.data[0])
         })

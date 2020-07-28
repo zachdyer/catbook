@@ -2,6 +2,9 @@
   <div class="container">
     <div>
       <Logo />
+      <h2 class="title">
+        History
+      </h2>
       <div class="card-columns mt-4">
         <div class="card" v-for="cat in cats">
           <img class="card-img-top" :src="cat.url" alt="Card image cap">
@@ -10,9 +13,7 @@
           </div>
         </div>
       </div>
-      <h1 class="title">
-        History
-      </h1>
+      
       <Footer />
       <Nav />
     </div>
@@ -56,7 +57,7 @@ export default {
   display: block;
   font-weight: 300;
   font-size: 100px;
-  color: #35495e;
+  color: #3b5999;
   letter-spacing: 1px;
 }
 
