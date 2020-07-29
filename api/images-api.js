@@ -8,7 +8,7 @@ app.get('/catpics', async (req, res) => {
   let randomDir = _.sample(fs.readdirSync(catPicsDir))
   fs.readdirSync(catPicsDir + randomDir).forEach(file => {
     console.log(randomDir + "/" + file)
-    catPics.push({name: randomDir, url: randomDir + "/" + file})
+    catPics.push({name: randomDir, url: '/img/cats/' + randomDir + "/" + file})
   });
   res.status(200).json(catPics)
 })

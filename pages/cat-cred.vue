@@ -3,14 +3,14 @@
     <div>
       <Logo />
       <h2 class="title">
-        Cat History
+        Cat Cred
       </h2>
       <Nav />
       <div class="card-columns mt-4">
-        <div class="card" v-for="cat in catHistory">
+        <div class="card" v-for="cat in catCreds" v-bind:class="{'text-white bg-success': cat.name == winner}">
           <img class="card-img-top" :src="cat.url" alt="Card image cap">
           <div class="card-body">
-            <h5 class="card-title">{{ cat.name }}</h5>
+            <h5 class="card-title">{{ cat.name }} <span class="badge badge-primary">{{cat.cred}}</span></h5>
           </div>
         </div>
       </div>
@@ -23,11 +23,21 @@
 export default {
   data(){
     return {
-      catHistory: this.$store.state.catHistory
+      catCreds: this.$store.state.catCreds,
+      winner: null
     }
   },
   mounted(){
-    console.log(this.$store.state.catHistory)
+    console.log(this.$store.state.catCreds)
+    let highscore = 0
+    for (const catprop in this.$store.state.catCreds) {
+      let cat = this.$store.state.catCreds[catprop]
+      console.log(cat)
+      if(cat.cred > highscore) {
+        highscore = cat.cred
+        this.winner = cat.name
+      }
+    }
   }
 }
 </script>

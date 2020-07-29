@@ -2,8 +2,8 @@
   <div class="container">
     <div>
       <Logo />
-      <Cat :cat="cat" />
       <Nav v-on:anotherone="updateCat" />
+      <Cat />
       <Footer />
     </div>
   </div>
@@ -13,57 +13,62 @@ import axios from 'axios'
 import _     from 'lodash'
 export default {
   async asyncData ({ $axios, params }) {
-    const cat = (await $axios.$get(`https://api.thecatapi.com/v1/images/search?limit=2`))
-    const catpics = (await $axios.$get(`/api/catpics`))
-    cat[0].name =  `Random Cat ${cat[0].id}`
-    cat[1].name =  `Random Cat ${cat[0].id}`
-    return {
-      cat: cat[0],
-      deck: cat[1],
-      catpics: catpics
-    }
+    // const cat = (await $axios.$get(`https://api.thecatapi.com/v1/images/search?limit=2`))
+    // cat[0].name =  `Random Cat ${cat[0].id}`
+    // cat[1].name =  `Random Cat ${cat[0].id}`
+    // console.log('done loading')
+    // return {
+    //   cat: cat[0],
+    //   deck: cat[1],
+    //   loading: false
+    // }
   },
   head: {
     title: 'Catbook Webapp'
   },
   data(){
     return {
-      deck: null
+      thumbnail: 'img/loading.gif',
+      title: 'kitty load...',
+      cats: {},
+      loading: true
     }
   },
   mounted(){
-    console.log(this.$route)
+
+    this.updateCat()
   },
   methods: {
     updateCat(){
-      if(this.deck) this.cat = this.deck
+
+      this.$store.commit('loading')
       if(Math.random() < 0.5) {
         axios.get(`/api/catpics`).then((response)=>{
           let cat = _.sample(response.data)
-      
-          this.deck = {
-            name: cat.name,
-            url: `/img/cats/${cat.url}`
-          }
           let preload = new Image()
           preload.src = cat.url
-          preload.addEventListener('load',function(){console.log('image preloaded')})
-          this.$store.commit('add', this.deck)
-          console.log(cat)
+          preload.addEventListener('load',()=>{
+            console.log('image preloaded', cat)
+            if(!this.cats[cat.name]) this.cats[cat.name] = {cred: 0}
+            this.cats[cat.name].cred += 1
+            this.$store.commit('add', cat)
+            this.$store.commit('catCred', cat)
+          })
         })
-        
       } else {
         axios
         .get(`https://api.thecatapi.com/v1/images/search`)
         .then((response) => {
+          let cat = response.data[0]
           let preload = new Image()
-          preload.src = response.data[0].url
-          preload.addEventListener('load',function(){console.log('image preloaded')})
-          response.data[0].name = `Random Cat ${response.data[0].id}`
-          this.deck = response.data[0]
-          this.$store.commit('add', response.data[0])
+          preload.src = cat.url
+          preload.addEventListener('load',()=>{
+            console.log('image preloaded', cat)
+            this.$store.commit('add', cat)
+          })
         })
       }
+      
     }
   }
 }

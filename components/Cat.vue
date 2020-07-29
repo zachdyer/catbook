@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="card mx-auto mt-4" style="width: 300px" v-if="cat">
-      <img class="card-img-top" :src="cat.url" alt="Card image cap">
+    <div class="card mx-auto mt-4" style="width: 300px">
+      <img class="card-img-top" :src="thumbnail" alt="Card image cap">
       <div class="card-body">
-        <h5 class="card-title">{{ cat.name }}</h5>
+        <h5 class="card-title">{{ name }}</h5>
       </div>
     </div>
   </div>
@@ -11,6 +11,20 @@
 <script>
 export default {
     props: ['cat'],
+    data(){
+      return{
+        // url: this.$store.state.cat.url,
+        // name: this.$store.state.cat.name,
+      }
+    },
+    computed: {
+      thumbnail(){
+        return this.$store.state.thumbnail
+      },
+      name(){
+        return this.$store.state.name
+      }
+    }
 }
 </script>
 <style>
